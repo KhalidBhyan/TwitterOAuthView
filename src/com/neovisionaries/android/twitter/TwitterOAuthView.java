@@ -892,7 +892,15 @@ public class TwitterOAuthView extends WebView
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error)
             {
-                handler.proceed();
+                int sslError = error.getPrimaryError();
+                if(sslError == SslError.SSL_UNTRUSTED || sslError == SslError.SSL_NOTYETVALID
+                        || sslError == SslError.SSL_DATE_INVALID || sslError == SslError.SSL_INVALID
+                        || sslError == SslError.SSL_EXPIRED || sslError == SslError.SSL_IDMISMATCH) {
+                    handler.cancel();
+                }
+                else {
+                    handler.proceed();
+                }
             }
 
 
